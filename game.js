@@ -315,11 +315,11 @@ function spawnJeffrey() {
         setTimeout(() => {
             if (jeffreyActive) {
                 jeffreyStealInterval = setInterval(() => {
-                    score = Math.max(0, score - Math.floor(score * 0.04));
+                    score = Math.max(0, score - Math.floor(score * 0.12));
                     render();
-                }, 1000);
+                }, 5000);
             }
-        }, 4000);
+        }, 5000);
     }
 }
 
