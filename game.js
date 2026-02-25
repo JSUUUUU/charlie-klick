@@ -46,7 +46,6 @@ const yaySound = document.getElementById('yaySound');
 const booSound = document.getElementById('booSound');
 const oilDimension = document.getElementById('oilDimension');
 const returnButton = document.getElementById('returnButton');
-const oilButtonTop = document.getElementById('oilButtonTop');
 const settingsButton = document.getElementById('settingsButton');
 const settingsScreen = document.getElementById('settingsScreen');
 const backButton = document.getElementById('backButton');
@@ -536,11 +535,6 @@ buildOilFactory.addEventListener('click', () => {
 oilButton.addEventListener('click', () => {
     gameContainer.style.display = 'none';
     document.getElementById('oilDimension').style.display = 'flex';
-});
-
-oilButtonTop.addEventListener('click', () => {
-    gameContainer.style.display = 'none';
-    oilDimension.style.display = 'flex';
 });
 
 returnButton.addEventListener('click', () => {
