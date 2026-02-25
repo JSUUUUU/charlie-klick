@@ -25,6 +25,7 @@ const upgrade1 = document.getElementById('upgrade1');
 const upgrade2 = document.getElementById('upgrade2');
 const upgrade3 = document.getElementById('upgrade3');
 const upgrade4 = document.getElementById('upgrade4');
+const oilButton = document.getElementById('oilButton');
 const bgMusic = document.getElementById('bgMusic');
 const gangSound = document.getElementById('gangSound');
 const startScreen = document.getElementById('startScreen');
@@ -43,6 +44,90 @@ const trumpTimer = document.getElementById('trumpTimer');
 const timerDisplay = document.getElementById('timerDisplay');
 const yaySound = document.getElementById('yaySound');
 const booSound = document.getElementById('booSound');
+const oilDimension = document.getElementById('oilDimension');
+const returnButton = document.getElementById('returnButton');
+const oilButtonTop = document.getElementById('oilButtonTop');
+const settingsButton = document.getElementById('settingsButton');
+const settingsScreen = document.getElementById('settingsScreen');
+const backButton = document.getElementById('backButton');
+const langEN = document.getElementById('langEN');
+const langSV = document.getElementById('langSV');
+const langAR = document.getElementById('langAR');
+
+let currentLanguage = localStorage.getItem('language') || 'en';
+
+const translations = {
+    en: {
+        title: 'Charlie Klick',
+        continue: 'Continue',
+        newGame: 'New Game',
+        settings: 'Settings',
+        back: 'Back',
+        language: 'Language:',
+        score: 'Score:',
+        perClick: 'Per Click:',
+        kirkPower: 'Kirk Power:',
+        credits: 'Credits: Yousef and Abdullah',
+        creator: 'Creator: Jusuf',
+        upgrade1: '+1 Kirk Power',
+        upgrade2: '+2 Kirk Power',
+        upgrade3: 'Counting or not counting gang violence',
+        upgrade4: 'Call TRUMP Military',
+        cost: 'Cost:',
+        max: 'MAX',
+        active: 'ACTIVE'
+    },
+    sv: {
+        title: 'Charlie Klick',
+        continue: 'Fortsätt',
+        newGame: 'Nytt Spel',
+        settings: 'Inställningar',
+        back: 'Tillbaka',
+        language: 'Språk:',
+        score: 'Poäng:',
+        perClick: 'Per Klick:',
+        kirkPower: 'Kirk Kraft:',
+        credits: 'Krediter: Yousef och Abdullah',
+        creator: 'Skapare: Jusuf',
+        upgrade1: '+1 Kirk Kraft',
+        upgrade2: '+2 Kirk Kraft',
+        upgrade3: 'Räkna eller inte räkna gängvåld',
+        upgrade4: 'Ring TRUMP Militär',
+        cost: 'Kostnad:',
+        max: 'MAX',
+        active: 'AKTIV'
+    },
+    ar: {
+        title: 'تشارلي كليك',
+        continue: 'متابعة',
+        newGame: 'لعبة جديدة',
+        settings: 'الإعدادات',
+        back: 'رجوع',
+        language: 'اللغة:',
+        score: 'النقاط:',
+        perClick: 'لكل نقرة:',
+        kirkPower: 'قوة كيرك:',
+        credits: 'الفضل: يوسف وعبدالله',
+        creator: 'المبدع: جوسف',
+        upgrade1: '+1 قوة كيرك',
+        upgrade2: '+2 قوة كيرك',
+        upgrade3: 'عد أو عدم عد عنف العصابات',
+        upgrade4: 'اتصل بجيش ترامب',
+        cost: 'التكلفة:',
+        max: 'الحد الأقصى',
+        active: 'نشط'
+    }
+};
+
+function updateLanguage() {
+    const t = translations[currentLanguage];
+    document.querySelector('#startScreen h1').textContent = t.title;
+    document.getElementById('continueButton').textContent = t.continue;
+    document.getElementById('newGameButton').textContent = t.newGame;
+    document.getElementById('settingsButton').textContent = t.settings;
+    document.querySelector('#settingsScreen h1').textContent = t.settings;
+    document.getElementById('backButton').textContent = t.back;
+}
 
 function createConfetti() {
     for (let i = 0; i < 100; i++) {
@@ -271,6 +356,36 @@ newGameButton.addEventListener('click', () => {
     startGame();
 });
 
+settingsButton.addEventListener('click', () => {
+    startScreen.style.display = 'none';
+    settingsScreen.style.display = 'block';
+});
+
+backButton.addEventListener('click', () => {
+    settingsScreen.style.display = 'none';
+    startScreen.style.display = 'block';
+});
+
+langEN.addEventListener('click', () => {
+    currentLanguage = 'en';
+    localStorage.setItem('language', currentLanguage);
+    updateLanguage();
+});
+
+langSV.addEventListener('click', () => {
+    currentLanguage = 'sv';
+    localStorage.setItem('language', currentLanguage);
+    updateLanguage();
+});
+
+langAR.addEventListener('click', () => {
+    currentLanguage = 'ar';
+    localStorage.setItem('language', currentLanguage);
+    updateLanguage();
+});
+
+updateLanguage();
+
 startButton.addEventListener('click', () => {
     startGame();
 });
@@ -416,6 +531,21 @@ buildOilFactory.addEventListener('click', () => {
         alert('Oil Factory built! Generates 5000 every 30 seconds when in debt.');
         render();
     }
+});
+
+oilButton.addEventListener('click', () => {
+    gameContainer.style.display = 'none';
+    document.getElementById('oilDimension').style.display = 'flex';
+});
+
+oilButtonTop.addEventListener('click', () => {
+    gameContainer.style.display = 'none';
+    oilDimension.style.display = 'flex';
+});
+
+returnButton.addEventListener('click', () => {
+    oilDimension.style.display = 'none';
+    gameContainer.style.display = 'flex';
 });
 
 function render() {

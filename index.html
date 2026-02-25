@@ -18,13 +18,29 @@
         <div class="start-buttons">
             <button id="continueButton" class="start-button">Continue</button>
             <button id="newGameButton" class="start-button">New Game</button>
+            <button id="settingsButton" class="start-button">Settings</button>
         </div>
         <button id="startButton" class="start-button" style="display: none;">Start Kirkifying</button>
     </div>
+    <div id="settingsScreen" class="start-screen" style="display: none;">
+        <h1>Settings</h1>
+        <div class="start-buttons">
+            <button id="langEN" class="start-button">English</button>
+            <button id="langSV" class="start-button">Svenska</button>
+            <button id="langAR" class="start-button">العربية</button>
+        </div>
+        <button id="backButton" class="start-button">Back</button>
+    </div>
     <div class="game-container" style="display: none;">
+        <button id="oilButtonTop" class="oil-button-top">
+            <img src="image/OIL" alt="Oil" style="width: 40px; height: 40px;">
+        </button>
         <div class="credits">
             <span>Credits: Yousef and Abdullah</span>
             <span>Creator: Jusuf</span>
+            <button id="oilButton" class="oil-button">
+                <img src="image/OIL" alt="Oil">
+            </button>
         </div>
         <h1>Charlie Klick</h1>
         <div class="score-display">
@@ -87,6 +103,11 @@
         <img src="image/TRUMP" alt="Trump">
         <p class="quiz-label">Next Quiz:</p>
         <p id="timerDisplay">10:00</p>
+    </div>
+    <div id="oilDimension" class="oil-dimension" style="display: none;">
+        <h1>🛢️ OIL DIMENSION 🛢️</h1>
+        <p>A strange world made entirely of oil...</p>
+        <button id="returnButton" class="upgrade-button">Return to Normal World</button>
     </div>
     <script src="game.js"></script>
 </body>
