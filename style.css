@@ -1,0 +1,387 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    zoom: 0.8;
+}
+
+.start-screen {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 100px 0 150px 0;
+}
+
+.start-screen h1 {
+    color: white;
+    font-size: 160px;
+    margin: 0;
+}
+
+.start-button {
+    padding: 30px 80px;
+    font-size: 36px;
+    font-weight: bold;
+    background: white;
+    color: #667eea;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.start-button:hover {
+    transform: scale(1.1);
+}
+
+.start-button:active {
+    transform: scale(0.95);
+}
+
+.start-buttons {
+    display: flex;
+    gap: 30px;
+}
+
+.game-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    position: relative;
+}
+
+.credits {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    gap: 20px;
+    color: white;
+    font-size: 14px;
+    z-index: 10;
+}
+
+.credits span {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 8px 15px;
+    border-radius: 5px;
+}
+
+h1 {
+    color: white;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.score-display {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.score-display p {
+    font-size: 18px;
+    margin: 5px 0;
+    color: white;
+}
+
+.score-display span {
+    font-weight: bold;
+    color: white;
+}
+
+.game-content {
+    display: flex;
+    gap: 20px;
+    flex: 1;
+}
+
+.left-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    border-radius: 20px;
+    padding: 40px;
+    position: relative;
+}
+
+.seat-background {
+    position: absolute;
+    width: 300px;
+    height: auto;
+    z-index: 1;
+    opacity: 0.8;
+}
+
+.click-button {
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: transparent;
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.1s;
+    box-shadow: none;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+    z-index: 2;
+}
+
+.click-button img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+}
+
+.click-button:hover {
+    transform: scale(1.05);
+}
+
+.click-button:active {
+    transform: scale(0.95);
+}
+
+.upgrades {
+    flex: 1;
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    overflow-y: auto;
+}
+
+.upgrades h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.upgrade-button {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+.upgrade-button:hover {
+    background: #45a049;
+}
+
+.upgrade-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.cost {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.jeffrey {
+    position: absolute;
+    width: 150px;
+    cursor: pointer;
+    z-index: 100;
+    animation: bounce 1s infinite;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin-left: 250px;
+}
+
+.jeffrey img {
+    width: 100%;
+    height: auto;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.good-jeffrey {
+    position: absolute;
+    width: 150px;
+    cursor: pointer;
+    z-index: 100;
+    animation: bounce 1s infinite;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin-left: -250px;
+    filter: brightness(1.5) hue-rotate(120deg);
+}
+
+.good-jeffrey img {
+    width: 100%;
+    height: auto;
+}
+
+.trump-quiz {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.trump-image {
+    width: 200px;
+    height: auto;
+    display: block;
+    margin: 0 auto 30px;
+}
+
+.quiz-content {
+    max-width: 800px;
+    padding: 40px;
+    background: white;
+    border-radius: 20px;
+}
+
+.quiz-content h2 {
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 28px;
+    text-align: center;
+}
+
+#quizOptions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.quiz-option {
+    padding: 15px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+.quiz-option:hover {
+    background: #764ba2;
+}
+
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: #f0f;
+    position: absolute;
+    animation: confetti-fall 3s linear forwards;
+}
+
+@keyframes confetti-fall {
+    to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.result-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 250;
+    font-size: 120px;
+    font-weight: bold;
+    pointer-events: none;
+}
+
+.oil-factory {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+    z-index: 200;
+    text-align: center;
+}
+
+.oil-factory h2 {
+    color: #d32f2f;
+    margin-bottom: 20px;
+}
+
+.trump-timer {
+    position: fixed;
+    top: 5px;
+    right: 20px;
+    background: transparent;
+    padding: 0;
+    border-radius: 15px;
+    box-shadow: none;
+    z-index: 150;
+    text-align: center;
+}
+
+.trump-timer img {
+    width: 150px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.trump-timer .quiz-label {
+    margin: -30px 0 0 0;
+    font-weight: bold;
+    color: white;
+    font-size: 12px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+.trump-timer #timerDisplay {
+    margin: 0;
+    font-weight: bold;
+    color: white;
+    font-size: 16px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}

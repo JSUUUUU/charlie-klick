@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charlie Klick</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <audio id="bgMusic" loop>
+        <source src="image/SOUND" type="audio/mpeg">
+    </audio>
+    <audio id="gangSound">
+        <source src="image/GANG" type="audio/mpeg">
+    </audio>
+    <div id="startScreen" class="start-screen">
+        <h1>Charlie Klick</h1>
+        <div class="start-buttons">
+            <button id="continueButton" class="start-button">Continue</button>
+            <button id="newGameButton" class="start-button">New Game</button>
+        </div>
+        <button id="startButton" class="start-button" style="display: none;">Start Kirkifying</button>
+    </div>
+    <div class="game-container" style="display: none;">
+        <div class="credits">
+            <span>Credits: Yousef and Abdullah</span>
+            <span>Creator: Jusuf</span>
+        </div>
+        <h1>Charlie Klick</h1>
+        <div class="score-display">
+            <p>Score: <span id="score">0</span></p>
+            <p>Per Click: <span id="perClick">1</span></p>
+            <p>Kirk Power: <span id="perSecond">0</span></p>
+        </div>
+        <div class="game-content">
+            <div class="left-section">
+                <button id="clickButton" class="click-button">
+                    <img id="clickImage" src="image/SITTING" alt="Click">
+                </button>
+                <div id="jeffrey" class="jeffrey" style="display: none;">
+                    <img src="image/JEFFREY" alt="Jeffrey">
+                </div>
+                <div id="goodJeffrey" class="good-jeffrey" style="display: none;">
+                    <img src="image/JEFFREY" alt="Good Jeffrey">
+                </div>
+            </div>
+            <div class="upgrades">
+                <h2>Upgrades</h2>
+                <button id="upgrade1" class="upgrade-button">
+                    +1 Kirk Power<br>
+                    <span class="cost">Cost: 40</span>
+                </button>
+                <button id="upgrade2" class="upgrade-button">
+                    +2 Kirk Power<br>
+                    <span class="cost">Cost: 450</span>
+                </button>
+                <button id="upgrade3" class="upgrade-button">
+                    Counting or not counting gang violence<br>
+                    <span class="cost">Cost: 10000</span>
+                </button>
+                <button id="upgrade4" class="upgrade-button">
+                    Call TRUMP Military<br>
+                    <span class="cost">Cost: 5000</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <audio id="yaySound">
+        <source src="image/YAY" type="audio/mpeg">
+    </audio>
+    <audio id="booSound">
+        <source src="image/BOO" type="audio/mpeg">
+    </audio>
+    <div id="trumpQuiz" class="trump-quiz" style="display: none;">
+        <img src="image/TRUMP" alt="Trump" class="trump-image">
+        <div class="quiz-content">
+            <h2 id="quizQuestion"></h2>
+            <div id="quizOptions"></div>
+        </div>
+    </div>
+    <div id="oilFactoryPanel" class="oil-factory" style="display: none;">
+        <h2>TRUMP demands OIL!</h2>
+        <p>You're in debt! Build an oil factory to pay Trump back.</p>
+        <button id="buildOilFactory" class="upgrade-button">Build Oil Factory<br><span class="cost">Cost: 50000</span></button>
+    </div>
+    <div id="trumpTimer" class="trump-timer" style="display: none;">
+        <img src="image/TRUMP" alt="Trump">
+        <p class="quiz-label">Next Quiz:</p>
+        <p id="timerDisplay">10:00</p>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
