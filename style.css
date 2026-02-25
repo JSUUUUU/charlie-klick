@@ -472,6 +472,8 @@ h1 {
     align-items: center;
     justify-content: center;
     z-index: 1000;
+    padding: 0;
+    margin: 0;
 }
 
 .oil-game-area {
@@ -498,6 +500,14 @@ h1 {
 .oil-dimension p {
     font-size: 1.5em;
     color: #ffaa44;
+}
+
+#worldMap {
+    border: none;
+    background: #2a1a0a;
+    display: block;
+    width: 100vw;
+    height: 100vh;
 }
 
 .oil-button-top {

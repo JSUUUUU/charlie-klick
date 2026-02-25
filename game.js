@@ -55,13 +55,6 @@ const langAR = document.getElementById('langAR');
 
 let currentLanguage = localStorage.getItem('language') || 'en';
 
-window.addEventListener('load', () => {
-    setTimeout(() => {
-        document.getElementById('loadingScreen').style.display = 'none';
-        document.getElementById('startScreen').style.display = 'flex';
-    }, 2000);
-});
-
 const translations = {
     en: {
         title: 'Charlie Klick',
@@ -548,9 +541,89 @@ oilButton.addEventListener('click', () => {
     }, 2000);
 });
 
-returnButton.addEventListener('click', () => {
-    oilDimension.style.display = 'none';
-    gameContainer.style.display = 'flex';
+const canvas = document.getElementById('worldMap');
+const ctx = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+function drawWorldMap() {
+    const w = canvas.width;
+    const h = canvas.height;
+    
+    ctx.fillStyle = '#1a4d2e';
+    ctx.fillRect(0, 0, w, h);
+    
+    ctx.fillStyle = '#4a7c59';
+    
+    // North America
+    ctx.beginPath();
+    ctx.moveTo(w*0.15, h*0.25);
+    ctx.lineTo(w*0.25, h*0.15);
+    ctx.lineTo(w*0.35, h*0.2);
+    ctx.lineTo(w*0.32, h*0.35);
+    ctx.lineTo(w*0.28, h*0.5);
+    ctx.lineTo(w*0.2, h*0.45);
+    ctx.closePath();
+    ctx.fill();
+    
+    // South America
+    ctx.beginPath();
+    ctx.moveTo(w*0.28, h*0.52);
+    ctx.lineTo(w*0.32, h*0.55);
+    ctx.lineTo(w*0.3, h*0.75);
+    ctx.lineTo(w*0.25, h*0.72);
+    ctx.closePath();
+    ctx.fill();
+    
+    // Europe
+    ctx.beginPath();
+    ctx.moveTo(w*0.48, h*0.2);
+    ctx.lineTo(w*0.58, h*0.18);
+    ctx.lineTo(w*0.6, h*0.3);
+    ctx.lineTo(w*0.52, h*0.35);
+    ctx.closePath();
+    ctx.fill();
+    
+    // Africa
+    ctx.beginPath();
+    ctx.moveTo(w*0.5, h*0.37);
+    ctx.lineTo(w*0.58, h*0.35);
+    ctx.lineTo(w*0.6, h*0.65);
+    ctx.lineTo(w*0.52, h*0.7);
+    ctx.closePath();
+    ctx.fill();
+    
+    // Asia
+    ctx.beginPath();
+    ctx.moveTo(w*0.6, h*0.2);
+    ctx.lineTo(w*0.85, h*0.15);
+    ctx.lineTo(w*0.88, h*0.35);
+    ctx.lineTo(w*0.75, h*0.45);
+    ctx.lineTo(w*0.62, h*0.38);
+    ctx.closePath();
+    ctx.fill();
+    
+    // Australia
+    ctx.fillRect(w*0.75, h*0.6, w*0.1, h*0.12);
+    
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '24px Arial';
+    ctx.fillText('North America', w*0.2, h*0.35);
+    ctx.fillText('South America', w*0.24, h*0.63);
+    ctx.fillText('Europe', w*0.5, h*0.27);
+    ctx.fillText('Africa', w*0.52, h*0.52);
+    ctx.fillText('Asia', w*0.7, h*0.3);
+    ctx.fillText('Australia', w*0.76, h*0.67);
+}
+
+drawWorldMap();
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && oilDimension.style.display === 'flex') {
+        oilDimension.style.display = 'none';
+        gameContainer.style.display = 'flex';
+    }
 });
 
 function render() {
