@@ -13,7 +13,12 @@
     <audio id="gangSound">
         <source src="image/GANG" type="audio/mpeg">
     </audio>
-    <div id="startScreen" class="start-screen">
+    <div id="loadingScreen" class="loading-screen">
+        <h1>OIL HUNTER</h1>
+        <div class="loading-spinner"></div>
+        <p>Loading...</p>
+    </div>
+    <div id="startScreen" class="start-screen" style="display: none;">
         <h1>Charlie Klick</h1>
         <div class="start-buttons">
             <button id="continueButton" class="start-button">Continue</button>
@@ -102,9 +107,11 @@
         <p id="timerDisplay">10:00</p>
     </div>
     <div id="oilDimension" class="oil-dimension" style="display: none;">
-        <h1>🛢️ OIL DIMENSION 🛢️</h1>
-        <p>A strange world made entirely of oil...</p>
-        <button id="returnButton" class="upgrade-button">Return to Normal World</button>
+        <div class="oil-game-area">
+            <h1>🛢️ OIL HUNTER 🛢️</h1>
+            <p>A strange world made entirely of oil...</p>
+            <button id="returnButton" class="upgrade-button">Return to Normal World</button>
+        </div>
     </div>
     <script src="game.js"></script>
 </body>

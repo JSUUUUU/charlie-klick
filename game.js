@@ -55,6 +55,13 @@ const langAR = document.getElementById('langAR');
 
 let currentLanguage = localStorage.getItem('language') || 'en';
 
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        document.getElementById('loadingScreen').style.display = 'none';
+        document.getElementById('startScreen').style.display = 'flex';
+    }, 2000);
+});
+
 const translations = {
     en: {
         title: 'Charlie Klick',
@@ -534,7 +541,11 @@ buildOilFactory.addEventListener('click', () => {
 
 oilButton.addEventListener('click', () => {
     gameContainer.style.display = 'none';
-    document.getElementById('oilDimension').style.display = 'flex';
+    document.getElementById('loadingScreen').style.display = 'flex';
+    setTimeout(() => {
+        document.getElementById('loadingScreen').style.display = 'none';
+        oilDimension.style.display = 'flex';
+    }, 2000);
 });
 
 returnButton.addEventListener('click', () => {
