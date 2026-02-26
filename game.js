@@ -20,16 +20,19 @@ let totalScore = 0;
 let oily1Count = 0;
 let oily2Count = 0;
 let oily3Count = 0;
+let trumpCost = 3000;
+let gangActive = false;
 
 const scoreEl = document.getElementById('score');
 const perClickEl = document.getElementById('perClick');
-const perSecondEl = document.getElementById('perSecond');
+const autoPerSecEl = document.getElementById('autoPerSec');
 const clickButton = document.getElementById('clickButton');
 const clickImage = clickButton.querySelector('img');
 const upgrade1 = document.getElementById('upgrade1');
 const upgrade2 = document.getElementById('upgrade2');
 const upgrade3 = document.getElementById('upgrade3');
 const upgrade4 = document.getElementById('upgrade4');
+const upgrade5 = document.getElementById('upgrade5');
 const oilButton = document.getElementById('oilButton');
 const bgMusic = document.getElementById('bgMusic');
 const gangSound = document.getElementById('gangSound');
@@ -67,6 +70,50 @@ const langSV = document.getElementById('langSV');
 const langAR = document.getElementById('langAR');
 
 let currentLanguage = localStorage.getItem('language') || 'en';
+let clickKey = localStorage.getItem('clickKey') || 'mouse';
+
+// Load saved game
+function loadGame() {
+    const saved = localStorage.getItem('charlieKlickSave');
+    if (saved) {
+        const data = JSON.parse(saved);
+        score = data.score || 0;
+        clickPower = data.clickPower || 1;
+        upgrade1Count = data.upgrade1Count || 0;
+        upgrade2Count = data.upgrade2Count || 0;
+        autoClickerActive = data.autoClickerActive || false;
+        trumpLevel = data.trumpLevel || 0;
+        trumpSoldiers = data.trumpSoldiers || 0;
+        trumpCost = data.trumpCost || 3000;
+        totalClicks = data.totalClicks || 0;
+        totalScore = data.totalScore || 0;
+        oily1Count = data.oily1Count || 0;
+        oily2Count = data.oily2Count || 0;
+        oily3Count = data.oily3Count || 0;
+        gangActive = data.gangActive || false;
+    }
+}
+
+// Save game
+function saveGame() {
+    const data = {
+        score,
+        clickPower,
+        upgrade1Count,
+        upgrade2Count,
+        autoClickerActive,
+        trumpLevel,
+        trumpSoldiers,
+        trumpCost,
+        totalClicks,
+        totalScore,
+        oily1Count,
+        oily2Count,
+        oily3Count,
+        gangActive
+    };
+    localStorage.setItem('charlieKlickSave', JSON.stringify(data));
+}
 
 const translations = {
     en: {
@@ -391,11 +438,10 @@ function startGame() {
 }
 
 continueButton.addEventListener('click', () => {
-    if (loadGame()) {
-        startGame();
-    } else {
-        alert('No saved game found!');
-    }
+    loadGame();
+    startScreen.style.display = 'none';
+    gameContainer.style.display = 'flex';
+    render();
 });
 
 newGameButton.addEventListener('click', () => {
@@ -407,7 +453,16 @@ newGameButton.addEventListener('click', () => {
     autoClickerActive = false;
     trumpLevel = 0;
     trumpSoldiers = 0;
-    startGame();
+    trumpCost = 3000;
+    totalClicks = 0;
+    totalScore = 0;
+    oily1Count = 0;
+    oily2Count = 0;
+    oily3Count = 0;
+    gangActive = false;
+    startScreen.style.display = 'none';
+    gameContainer.style.display = 'flex';
+    render();
 });
 
 settingsButton.addEventListener('click', () => {
@@ -437,6 +492,91 @@ langAR.addEventListener('click', () => {
     localStorage.setItem('language', currentLanguage);
     updateLanguage();
 });
+
+document.getElementById('keyMouse').addEventListener('click', () => {
+    clickKey = 'mouse';
+    localStorage.setItem('clickKey', clickKey);
+});
+
+document.getElementById('keySpace').addEventListener('click', () => {
+    clickKey = 'space';
+    localStorage.setItem('clickKey', clickKey);
+});
+
+// Spacebar click
+document.addEventListener('keydown', (e) => {
+    if (clickKey === 'space' && e.code === 'Space' && gameContainer.style.display !== 'none') {
+        e.preventDefault();
+        clickButton.click();
+    }
+});
+
+// Command system
+const commandBox = document.getElementById('commandBox');
+commandBox.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        const cmd = commandBox.value.trim().toLowerCase();
+        executeCommand(cmd);
+        commandBox.value = '';
+    }
+});
+
+// Auto-save before leaving
+window.addEventListener('beforeunload', (e) => {
+    saveGame();
+    e.preventDefault();
+    e.returnValue = 'Do you want to save and quit?';
+    return 'Do you want to save and quit?';
+});
+
+// Save and quit button
+document.getElementById('saveQuitButton').addEventListener('click', () => {
+    saveGame();
+    alert('Game saved!');
+    gameContainer.style.display = 'none';
+    startScreen.style.display = 'block';
+});
+
+// Auto-save every 30 seconds
+setInterval(() => {
+    saveGame();
+}, 30000);
+
+function executeCommand(cmd) {
+    const parts = cmd.split(' ');
+    const command = parts[0];
+    const arg = parts[1];
+    
+    switch(command) {
+        case '/give':
+            const amount = parseInt(arg) || 1000;
+            score += amount;
+            alert(`Added ${amount} KIRKS`);
+            break;
+        case '/reset':
+            if (confirm('Reset game?')) {
+                localStorage.clear();
+                location.reload();
+            }
+            break;
+        case '/power':
+            const power = parseInt(arg) || 10;
+            clickPower = power;
+            alert(`Click power set to ${power}`);
+            break;
+        case '/unlock':
+            upgrade1Count = 3;
+            upgrade2Count = 3;
+            autoClickerActive = true;
+            gangActive = true;
+            trumpLevel = 10;
+            alert('All upgrades unlocked!');
+            break;
+        default:
+            alert('Unknown command. Try: /give, /reset, /power, /unlock');
+    }
+    render();
+}
 
 updateLanguage();
 
@@ -513,6 +653,7 @@ function spawnJeffrey() {
     if (score < 1000 && !jeffreyActive && Math.random() < 0.1) {
         jeffrey.style.display = 'block';
         jeffreyActive = true;
+        jeffreyClickCount = 0;
         setTimeout(() => {
             if (jeffreyActive) {
                 jeffreyStealInterval = setInterval(() => {
@@ -523,6 +664,24 @@ function spawnJeffrey() {
         }, 5000);
     }
 }
+
+jeffrey.addEventListener('click', () => {
+    if (jeffreyActive) {
+        jeffreyClickCount++;
+        jeffrey.style.transform = `scale(${1 - jeffreyClickCount * 0.15})`;
+        
+        if (jeffreyClickCount >= 5) {
+            jeffrey.style.display = 'none';
+            jeffrey.style.transform = 'scale(1)';
+            jeffreyActive = false;
+            jeffreyClickCount = 0;
+            if (jeffreyStealInterval) {
+                clearInterval(jeffreyStealInterval);
+                jeffreyStealInterval = null;
+            }
+        }
+    }
+});
 
 clickButton.addEventListener('click', () => {
     if (!musicStarted) {
@@ -539,11 +698,12 @@ clickButton.addEventListener('click', () => {
         clickImage.src = 'image/CHARLIE.png';
     }, 500);
     
-    // Create floating +1
+    // Create floating +1 with random horizontal offset
     const plus = document.createElement('div');
     plus.className = 'floating-plus';
     plus.textContent = '+' + clickPower;
-    plus.style.left = (Math.random() * 200 - 100) + 'px';
+    plus.style.left = (Math.random() * 100 - 50) + 'px';
+    plus.style.animationDelay = '0s';
     clickButton.appendChild(plus);
     setTimeout(() => plus.remove(), 1000);
     
@@ -557,6 +717,9 @@ upgrade1.addEventListener('click', () => {
         upgrade1Count++;
         spawnJeffrey();
         render();
+    } else if (score < 40) {
+        upgrade1.classList.add('flash-red');
+        setTimeout(() => upgrade1.classList.remove('flash-red'), 700);
     }
 });
 
@@ -567,12 +730,15 @@ upgrade2.addEventListener('click', () => {
         upgrade2Count++;
         spawnJeffrey();
         render();
+    } else if (score < 450) {
+        upgrade2.classList.add('flash-red');
+        setTimeout(() => upgrade2.classList.remove('flash-red'), 700);
     }
 });
 
 upgrade3.addEventListener('click', () => {
-    if (score >= 10000 && !autoClickerActive) {
-        score -= 10000;
+    if (score >= 3000 && !autoClickerActive) {
+        score -= 3000;
         autoClickerActive = true;
         
         bgMusic.pause();
@@ -587,12 +753,16 @@ upgrade3.addEventListener('click', () => {
             render();
         }, 10000);
         render();
+    } else if (score < 3000) {
+        upgrade3.classList.add('flash-red');
+        setTimeout(() => upgrade3.classList.remove('flash-red'), 700);
     }
 });
 
 upgrade4.addEventListener('click', () => {
-    if (score >= 5000 && trumpLevel < 10) {
-        score -= 5000;
+    if (score >= trumpCost && trumpLevel < 10) {
+        score -= trumpCost;
+        trumpCost += 3000;
         trumpLevel++;
         trumpSoldiers++;
         
@@ -610,6 +780,27 @@ upgrade4.addEventListener('click', () => {
         showSoldierAnimation();
         
         render();
+    } else if (score < trumpCost) {
+        upgrade4.classList.add('flash-red');
+        setTimeout(() => upgrade4.classList.remove('flash-red'), 700);
+    }
+});
+
+upgrade5.addEventListener('click', () => {
+    if (score >= 1500 && !gangActive) {
+        score -= 1500;
+        gangActive = true;
+        
+        setInterval(() => {
+            score += 35;
+            totalScore += 35;
+            render();
+        }, 4000);
+        
+        render();
+    } else if (score < 1500) {
+        upgrade5.classList.add('flash-red');
+        setTimeout(() => upgrade5.classList.remove('flash-red'), 700);
     }
 });
 
@@ -1109,7 +1300,18 @@ document.addEventListener('keydown', (e) => {
 function render() {
     scoreEl.textContent = Math.floor(score);
     perClickEl.textContent = clickPower;
-    perSecondEl.textContent = autoClickerActive ? '3 per 10s' : '0';
+    
+    // Calculate auto clicks per second
+    let autoPerSec = 0;
+    if (autoClickerActive) autoPerSec += 0.3; // 3 per 10s = 0.3/s
+    if (gangActive) autoPerSec += 8.75; // 35 per 4s = 8.75/s
+    autoPerSec += oily1Count * 2; // 10 per 5s = 2/s
+    autoPerSec += oily2Count * 5; // 25 per 5s = 5/s
+    autoPerSec += oily3Count * 20; // 100 per 5s = 20/s
+    autoPerSecEl.textContent = autoPerSec.toFixed(1);
+    
+    // Save progress
+    saveGame();
     
     // Check if went into debt
     if (score < 0 && !inDebt) {
@@ -1138,8 +1340,9 @@ function render() {
     
     upgrade1.disabled = score < 40 || upgrade1Count >= 3;
     upgrade2.disabled = score < 450 || upgrade2Count >= 3;
-    upgrade3.disabled = score < 10000 || autoClickerActive;
-    upgrade4.disabled = score < 5000 || trumpLevel >= 10;
+    upgrade3.disabled = score < 3000 || autoClickerActive;
+    upgrade4.disabled = score < trumpCost || trumpLevel >= 10;
+    upgrade5.disabled = score < 1500 || gangActive;
     
     if (upgrade1Count >= 3) {
         upgrade1.innerHTML = '+1 Kirk Power<br><span class="cost">MAX</span>';
@@ -1150,13 +1353,18 @@ function render() {
     if (autoClickerActive) {
         upgrade3.innerHTML = 'Counting or not counting gang violence<br><span class="cost">ACTIVE</span>';
     }
+    if (gangActive) {
+        upgrade5.innerHTML = 'Join the gang<br><span class="cost">ACTIVE</span>';
+    }
     if (trumpLevel > 0) {
         let units = '';
         if (trumpLevel <= 5) units = `${trumpLevel} Soldier${trumpLevel > 1 ? 's' : ''}`;
         else if (trumpLevel <= 8) units = `5 Soldiers + ${trumpLevel - 5} Tank${trumpLevel > 6 ? 's' : ''}`;
         else units = `5 Soldiers + 3 Tanks + ${trumpLevel - 8} Plane${trumpLevel > 9 ? 's' : ''}`;
         
-        upgrade4.innerHTML = `Call TRUMP Military<br><span class="cost">${trumpLevel >= 10 ? 'MAX' : 'Level ' + trumpLevel + ': ' + units}</span>`;
+        upgrade4.innerHTML = `Call TRUMP Military<br><span class="cost">${trumpLevel >= 10 ? 'MAX' : 'Cost: ' + trumpCost}</span>`;
+    } else {
+        upgrade4.innerHTML = `Call TRUMP Military<br><span class="cost">Cost: ${trumpCost}</span>`;
     }
     
     updateStats();
@@ -1462,3 +1670,12 @@ function handlePrize(prize) {
 
 wheelInterval = setInterval(updateWheelTimer, 1000);
 updateWheelTimer();
+
+// Auto-load game on page load
+window.addEventListener('load', () => {
+    const saved = localStorage.getItem('charlieKlickSave');
+    if (saved) {
+        loadGame();
+        render();
+    }
+});

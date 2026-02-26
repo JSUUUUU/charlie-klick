@@ -34,6 +34,11 @@
             <button id="langSV" class="start-button">Svenska</button>
             <button id="langAR" class="start-button">العربية</button>
         </div>
+        <h2 style="color: white; margin-top: 30px;">Click Key</h2>
+        <div class="start-buttons">
+            <button id="keyMouse" class="start-button">Mouse Click</button>
+            <button id="keySpace" class="start-button">Spacebar</button>
+        </div>
         <button id="backButton" class="start-button">Back</button>
     </div>
     <div class="game-container" style="display: none;">
@@ -44,6 +49,7 @@
                 <img src="image/OIL" alt="Oil">
                 <div id="oilLock" class="oil-lock">🔒</div>
             </button>
+            <button id="saveQuitButton" class="save-quit-button">Save & Quit</button>
         </div>
         <button id="trumpButton" class="trump-button">
             <img src="image/TRUMP" alt="Trump">
@@ -54,12 +60,19 @@
             <div id="wheelTimer" class="wheel-timer">1:00:00</div>
         </button>
         </div>
+        <div class="top-stats">
+            <div class="stat-box">
+                <div class="stat-value" id="score">0</div>
+                <div class="stat-label">KIRKS</div>
+            </div>
+        </div>
         <h1>Charlie Klick</h1>
         <div class="score-display">
-            <p>Score: <span id="score">0</span></p>
             <p>Per Click: <span id="perClick">1</span></p>
-            <p>Kirk Power: <span id="perSecond">0</span></p>
-            <p>Total Clicks: <span id="totalClicks">0</span></p>
+            <p>Auto Click/sec: <span id="autoPerSec">0</span></p>
+        </div>
+        <div class="command-input">
+            <input type="text" id="commandBox" placeholder="Enter command...">
         </div>
         <div class="game-content">
             <div class="left-section">
@@ -89,11 +102,15 @@
                     </button>
                     <button id="upgrade3" class="upgrade-button">
                         Counting or not counting gang violence<br>
-                        <span class="cost">Cost: 10000</span>
+                        <span class="cost">Cost: 3000</span>
                     </button>
                     <button id="upgrade4" class="upgrade-button">
                         Call TRUMP Military<br>
-                        <span class="cost">Cost: 5000</span>
+                        <span class="cost">Cost: 3000</span>
+                    </button>
+                    <button id="upgrade5" class="upgrade-button">
+                        Join the gang<br>
+                        <span class="cost">Cost: 1500</span>
                     </button>
                 </div>
                 <div id="oilyTab" class="upgrade-content">
