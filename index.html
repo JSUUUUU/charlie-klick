@@ -42,18 +42,29 @@
             <span>Creator: Jusuf</span>
             <button id="oilButton" class="oil-button">
                 <img src="image/OIL" alt="Oil">
+                <div id="oilLock" class="oil-lock">🔒</div>
             </button>
+        </div>
+        <button id="trumpButton" class="trump-button">
+            <img src="image/TRUMP" alt="Trump">
+            <div id="trumpLock" class="trump-lock">🔒</div>
+        </button>
+        <button id="wheelButton" class="wheel-button">
+            🎡
+            <div id="wheelTimer" class="wheel-timer">1:00:00</div>
+        </button>
         </div>
         <h1>Charlie Klick</h1>
         <div class="score-display">
             <p>Score: <span id="score">0</span></p>
             <p>Per Click: <span id="perClick">1</span></p>
             <p>Kirk Power: <span id="perSecond">0</span></p>
+            <p>Total Clicks: <span id="totalClicks">0</span></p>
         </div>
         <div class="game-content">
             <div class="left-section">
                 <button id="clickButton" class="click-button">
-                    <img id="clickImage" src="image/SITTING" alt="Click">
+                    <img src="image/CHARLIE.png" alt="Charlie">
                 </button>
                 <div id="jeffrey" class="jeffrey" style="display: none;">
                     <img src="image/JEFFREY" alt="Jeffrey">
@@ -63,32 +74,73 @@
                 </div>
             </div>
             <div class="upgrades">
-                <h2>Upgrades</h2>
-                <button id="upgrade1" class="upgrade-button">
-                    +1 Kirk Power<br>
-                    <span class="cost">Cost: 40</span>
-                </button>
-                <button id="upgrade2" class="upgrade-button">
-                    +2 Kirk Power<br>
-                    <span class="cost">Cost: 450</span>
-                </button>
-                <button id="upgrade3" class="upgrade-button">
-                    Counting or not counting gang violence<br>
-                    <span class="cost">Cost: 10000</span>
-                </button>
-                <button id="upgrade4" class="upgrade-button">
-                    Call TRUMP Military<br>
-                    <span class="cost">Cost: 5000</span>
-                </button>
+                <div class="upgrade-tabs">
+                    <button class="tab-button active" data-tab="upgrades">Upgrades</button>
+                    <button class="tab-button" data-tab="oily">OILY</button>
+                </div>
+                <div id="upgradesTab" class="upgrade-content active">
+                    <button id="upgrade1" class="upgrade-button">
+                        +1 Kirk Power<br>
+                        <span class="cost">Cost: 40</span>
+                    </button>
+                    <button id="upgrade2" class="upgrade-button">
+                        +2 Kirk Power<br>
+                        <span class="cost">Cost: 450</span>
+                    </button>
+                    <button id="upgrade3" class="upgrade-button">
+                        Counting or not counting gang violence<br>
+                        <span class="cost">Cost: 10000</span>
+                    </button>
+                    <button id="upgrade4" class="upgrade-button">
+                        Call TRUMP Military<br>
+                        <span class="cost">Cost: 5000</span>
+                    </button>
+                </div>
+                <div id="oilyTab" class="upgrade-content">
+                    <button id="oily1" class="upgrade-button">
+                        Oil Drill<br>
+                        <span class="cost">Cost: 50000</span>
+                    </button>
+                    <button id="oily2" class="upgrade-button">
+                        Oil Refinery<br>
+                        <span class="cost">Cost: 100000</span>
+                    </button>
+                    <button id="oily3" class="upgrade-button">
+                        Oil Empire<br>
+                        <span class="cost">Cost: 500000</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
+    
+    <div id="wheelOverlay" class="wheel-overlay" style="display: none;">
+        <div class="wheel-container">
+            <h2>SPIN THE WHEEL</h2>
+            <canvas id="wheelCanvas" width="500" height="500"></canvas>
+            <button id="spinButton" class="spin-btn">SPIN</button>
+            <button id="closeWheel" class="close-wheel">✕</button>
+        </div>
+    </div>
+    
     <audio id="yaySound">
         <source src="image/YAY" type="audio/mpeg">
     </audio>
     <audio id="booSound">
         <source src="image/BOO" type="audio/mpeg">
     </audio>
+    <audio id="freddySound">
+        <source src="image/FREDDY" type="audio/mpeg">
+    </audio>
+    <audio id="virusSound">
+        <source src="image/VIRUS.mp3" type="audio/mpeg">
+    </audio>
+    <div id="debtWarning" class="debt-warning" style="display: none;">
+        <h1>⚠️ TRUMP DEMANDS PAYMENT! ⚠️</h1>
+        <p>You have 30 seconds to buy what you need!</p>
+        <p id="debtTimer">30</p>
+        <p>After that, you'll be sent to the OIL DIMENSION!</p>
+    </div>
     <div id="trumpQuiz" class="trump-quiz" style="display: none;">
         <img src="image/TRUMP" alt="Trump" class="trump-image">
         <div class="quiz-content">
@@ -107,7 +159,50 @@
         <p id="timerDisplay">10:00</p>
     </div>
     <div id="oilDimension" class="oil-dimension" style="display: none;">
+        <button id="playOilGame" class="play-oil-button">PLAY</button>
         <canvas id="worldMap"></canvas>
+        <img id="ssCharacter" src="image/SS" class="ss-character" style="display: none;">
+        <img id="pickaxe" src="image/PICAXE" class="pickaxe" style="display: none;">
+    </div>
+    <div id="pumpScreen" class="pump-screen" style="display: none;">
+        <div class="pump-left-panel">
+            <h2>Resources</h2>
+            <p>Money: <span id="playerMoney">0</span></p>
+            <p>Steel: <span id="steelCount">0</span> / 100</p>
+            <p>Concrete: <span id="concreteCount">0</span> / 100</p>
+            <p>Workers: <span id="workerCount">0</span></p>
+            <div class="upgrade-section">
+                <h3>Hire Workers</h3>
+                <button id="hireWorker" class="small-button">Hire Worker<br>Cost: 10000</button>
+            </div>
+        </div>
+        <div class="pump-center">
+            <h1 id="pumpLocationTitle">Building in...</h1>
+            <canvas id="pumpCanvas" width="600" height="500"></canvas>
+            <div class="build-buttons">
+                <button id="gatherSteel" class="small-button">Gather Steel</button>
+                <button id="gatherConcrete" class="small-button">Gather Concrete</button>
+                <button id="buildFoundation" class="small-button">Pour Foundation (30 Concrete)</button>
+                <button id="buildPlatform" class="small-button">Build Platform (20 Steel + 10 Concrete)</button>
+                <button id="buildDerrick" class="small-button">Erect Derrick (40 Steel)</button>
+                <button id="installPump" class="small-button">Install Pump (30 Steel + 20 Concrete)</button>
+                <button id="connectPipes" class="small-button">Connect Pipes (20 Steel)</button>
+            </div>
+            <p style="color: white;">Pumps Built: <span id="pumpCount">0</span> / 5</p>
+            <p style="color: white; font-size: 14px;">Stage: <span id="currentStage">Ready to start</span></p>
+        </div>
+        <button id="finishBuilding" class="upgrade-button" style="display: none; position: absolute; bottom: 20px;">Finish & Collect Oil</button>
+    </div>
+    <div id="drillingGame" class="drilling-game" style="display: none;">
+        <h1>Start Oil Production!</h1>
+        <p style="color: white; font-size: 24px;">Hit zones 5 times to set production quality!</p>
+        <p style="color: #00ff00;">GREEN = Boost (2x speed, high jackpot chance)</p>
+        <p style="color: #ffff00;">YELLOW = Normal (may break down)</p>
+        <p style="color: #ff0000;">RED = Minimum oil (breaks often)</p>
+        <p style="color: white;">Attempts left: <span id="attemptsLeft">5</span></p>
+        <p style="color: white;">Green: <span id="greenHits">0</span> | Yellow: <span id="yellowHits">0</span> | Red: <span id="redHits">0</span></p>
+        <canvas id="drillingCanvas" width="600" height="200"></canvas>
+        <button id="hitButton" class="upgrade-button">HIT!</button>
     </div>
     <script src="game.js"></script>
 </body>

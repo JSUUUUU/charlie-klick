@@ -9,13 +9,28 @@
     pointer-events: none;
 }
 
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
 body {
     font-family: Arial, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
     margin: 0;
     padding: 0;
-    zoom: 0.8;
+    zoom: 1;
+    overflow: hidden;
+}
+
+.fullscreen {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 button, .click-button, #clickButton {
@@ -57,13 +72,18 @@ button, .click-button, #clickButton {
 }
 
 .start-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
     height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     padding: 100px 0 150px 0;
-    position: relative;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    z-index: 1000;
 }
 
 .start-screen h1 {
@@ -106,11 +126,17 @@ button, .click-button, #clickButton {
 }
 
 .game-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
     height: 100vh;
     display: flex;
     flex-direction: column;
     padding: 20px;
-    position: relative;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    z-index: 1;
+    box-sizing: border-box;
 }
 
 .credits {
@@ -137,12 +163,28 @@ button, .click-button, #clickButton {
     border: none;
     cursor: pointer;
     transition: transform 0.2s;
+    position: relative;
 }
 
 .oil-button img {
     width: 40px;
     height: auto;
     display: block;
+}
+
+.oil-lock {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(128, 128, 128, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    border-radius: 5px;
+    pointer-events: none;
 }
 
 .oil-button:hover {
@@ -153,23 +195,150 @@ button, .click-button, #clickButton {
     transform: scale(0.95);
 }
 
+.trump-button {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 8px 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+}
+
+.trump-button img {
+    width: 40px;
+    height: auto;
+    display: block;
+}
+
+.trump-lock {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(128, 128, 128, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    border-radius: 5px;
+    pointer-events: none;
+}
+
+.trump-button:hover {
+    transform: scale(1.1);
+}
+
+.trump-button:active {
+    transform: scale(0.95);
+}
+
+.wheel-button {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 8px 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+    position: absolute;
+    top: 20px;
+    right: 80px;
+    z-index: 10;
+    font-size: 32px;
+}
+
+.wheel-button:hover {
+    transform: scale(1.1);
+}
+
+.wheel-timer {
+    font-size: 12px;
+    color: white;
+    margin-top: 5px;
+}
+
+.wheel-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wheel-container {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    position: relative;
+}
+
+.wheel-container h2 {
+    color: #667eea;
+    margin-bottom: 20px;
+}
+
+.spin-btn {
+    margin-top: 20px;
+    padding: 15px 40px;
+    font-size: 24px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.spin-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.close-wheel {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #f44336;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
 h1 {
     color: white;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    margin-top: 10px;
     text-align: center;
+    font-size: 32px;
+    flex-shrink: 0;
 }
 
 .score-display {
     background: rgba(255, 255, 255, 0.2);
-    padding: 20px;
+    padding: 15px;
     border-radius: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     text-align: center;
+    flex-shrink: 0;
 }
 
 .score-display p {
-    font-size: 18px;
-    margin: 5px 0;
+    font-size: 16px;
+    margin: 3px 0;
     color: white;
 }
 
@@ -182,17 +351,48 @@ h1 {
     display: flex;
     gap: 20px;
     flex: 1;
+    overflow: hidden;
+    min-height: 0;
+    justify-content: space-between;
 }
 
 .left-section {
-    flex: 1;
+    flex: 0 0 600px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     background: transparent;
     border-radius: 20px;
-    padding: 40px;
+    padding: 20px;
+    padding-right: 50px;
     position: relative;
+    min-height: 0;
+}
+
+.click-button {
+    width: 450px;
+    height: 450px;
+    border-radius: 50%;
+    background: #FF6B6B;
+    color: white;
+    font-size: 48px;
+    font-weight: bold;
+    border: 5px solid white;
+    cursor: pointer;
+    transition: transform 0.1s;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+    z-index: 2;
+}
+
+.click-button img {
+    width: 150%;
+    height: 150%;
+    object-fit: cover;
+    object-position: center 30%;
+}
 }
 
 .seat-background {
@@ -204,8 +404,8 @@ h1 {
 }
 
 .click-button {
-    width: 500px;
-    height: 500px;
+    width: 300px;
+    height: 300px;
     border-radius: 50%;
     background: transparent;
     color: white;
@@ -215,17 +415,21 @@ h1 {
     cursor: pointer;
     transition: transform 0.1s;
     box-shadow: none;
-    overflow: hidden;
+    overflow: visible;
     padding: 0;
     position: relative;
     z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .click-button img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center top;
+    width: 250px;
+    height: 250px;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 50%;
 }
 
 .click-button:hover {
@@ -236,12 +440,71 @@ h1 {
     transform: scale(0.95);
 }
 
+.floating-plus {
+    position: absolute;
+    top: 50%;
+    color: #FFD700;
+    font-size: 48px;
+    font-weight: bold;
+    pointer-events: none;
+    animation: floatUp 1s ease-out;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-150px);
+        opacity: 0;
+    }
+}
+
 .upgrades {
-    flex: 1;
+    flex: 0 0 450px;
     background: white;
     border-radius: 20px;
     padding: 30px;
     overflow-y: auto;
+    z-index: 10;
+    margin-right: 20px;
+}
+
+.upgrade-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    flex: 1;
+    padding: 10px;
+    background: #ddd;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.tab-button:hover {
+    background: #ccc;
+}
+
+.tab-button.active {
+    background: #667eea;
+    color: white;
+}
+
+.upgrade-content {
+    display: none;
+}
+
+.upgrade-content.active {
+    display: block;
 }
 
 .upgrades h2 {
@@ -252,14 +515,14 @@ h1 {
 .upgrade-button {
     display: block;
     width: 100%;
-    padding: 15px;
-    margin: 10px 0;
+    padding: 20px;
+    margin: 12px 0;
     background: #4CAF50;
     color: white;
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 18px;
     transition: background 0.3s;
 }
 
@@ -275,6 +538,25 @@ h1 {
 .cost {
     font-size: 14px;
     opacity: 0.9;
+}
+
+.stats-panel {
+    color: #333;
+}
+
+.stats-panel h3 {
+    margin-bottom: 15px;
+    color: #667eea;
+}
+
+.stats-panel p {
+    margin: 8px 0;
+    font-size: 14px;
+}
+
+.stats-panel span {
+    font-weight: bold;
+    color: #667eea;
 }
 
 .jeffrey {
@@ -466,7 +748,7 @@ h1 {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: linear-gradient(135deg, #1a0f00, #4a2f00, #1a0f00);
+    background: #1a4d2e;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -504,10 +786,242 @@ h1 {
 
 #worldMap {
     border: none;
-    background: #2a1a0a;
+    background: transparent;
     display: block;
     width: 100vw;
     height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: none;
+}
+
+.play-oil-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 30px 80px;
+    font-size: 48px;
+    font-weight: bold;
+    background: #ff8800;
+    color: white;
+    border: 5px solid #ffaa00;
+    border-radius: 20px;
+    cursor: pointer;
+    z-index: 10;
+    pointer-events: auto;
+}
+
+.play-oil-button:hover {
+    background: #ffaa00;
+    box-shadow: 0 0 30px #ff8800;
+}
+
+.ss-character {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    pointer-events: none;
+    z-index: 5;
+    image-rendering: pixelated;
+    background: transparent;
+}
+
+.pickaxe {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    pointer-events: none;
+    z-index: 6;
+    image-rendering: pixelated;
+    background: transparent;
+}
+
+.pump-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #2a1a0a, #4a2f00);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    z-index: 1001;
+}
+
+.pump-left-panel {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 30px;
+    border-radius: 15px;
+    border: 3px solid #ff8800;
+    width: 250px;
+    height: 500px;
+}
+
+.pump-left-panel h2, .pump-left-panel h3 {
+    color: #ff8800;
+    margin: 10px 0;
+}
+
+.pump-left-panel p {
+    color: white;
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.pump-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.pump-screen h1 {
+    color: #ff8800;
+    font-size: 36px;
+    text-shadow: 0 0 20px #ff8800;
+    margin: 0;
+}
+
+.upgrade-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid #ff8800;
+}
+
+#pumpCanvas {
+    border: 5px solid #ff8800;
+    background: #3a2a1a;
+    pointer-events: auto;
+}
+
+.build-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.small-button {
+    padding: 10px 20px;
+    font-size: 14px;
+    background: #ff8800;
+    color: white;
+    border: 2px solid #ffaa00;
+    border-radius: 10px;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.small-button:hover {
+    background: #ffaa00;
+}
+
+.small-button:disabled {
+    background: #666;
+    cursor: not-allowed;
+}
+
+.drilling-game {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #1a0f00, #4a2f00);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    z-index: 1002;
+}
+
+.drilling-game h1 {
+    color: #ff8800;
+    font-size: 48px;
+    text-shadow: 0 0 20px #ff8800;
+}
+
+#drillingCanvas {
+    border: 5px solid #ff8800;
+    background: #2a1a0a;
+}
+
+.running-soldier {
+    position: fixed;
+    top: 50%;
+    width: 80px;
+    height: 80px;
+    z-index: 999;
+    animation: runAcross 3s linear;
+    pointer-events: none;
+}
+
+@keyframes runAcross {
+    0% {
+        left: -100px;
+        transform: translateY(-50%);
+    }
+    100% {
+        left: 100vw;
+        transform: translateY(-50%);
+    }
+}
+
+.bombing-plane {
+    position: fixed;
+    top: -50px;
+    font-size: 48px;
+    z-index: 999;
+    animation: bombDown 2s linear;
+    pointer-events: none;
+}
+
+@keyframes bombDown {
+    0% {
+        top: -50px;
+    }
+    100% {
+        top: 100vh;
+    }
+}
+
+.debt-warning {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 0, 0, 0.95);
+    padding: 20px 40px;
+    border: 5px solid #ffff00;
+    border-radius: 20px;
+    z-index: 500;
+    text-align: center;
+    box-shadow: 0 0 30px #ff0000, 0 0 60px #ff0000;
+}
+
+.debt-warning h1 {
+    color: #ffff00;
+    font-size: 36px;
+    margin: 0 0 10px 0;
+    text-shadow: 0 0 10px #ff0000;
+}
+
+.debt-warning p {
+    color: #ffffff;
+    font-size: 18px;
+    margin: 5px 0;
+    text-shadow: 0 0 5px #000000;
+}
+
+.debt-warning #debtTimer {
+    font-size: 48px;
+    font-weight: bold;
+    color: #ffff00;
+    text-shadow: 0 0 10px #ff0000;
 }
 
 .oil-button-top {
