@@ -13,6 +13,9 @@
     <audio id="gangSound">
         <source src="image/GANG" type="audio/mpeg">
     </audio>
+    <audio id="virusSound" loop>
+        <source src="image/VIRUS" type="audio/mpeg">
+    </audio>
     <div id="startScreen" class="start-screen">
         <h1>Charlie Klick</h1>
         <div class="start-buttons">
@@ -23,13 +26,41 @@
         <button id="startButton" class="start-button" style="display: none;">Start Kirkifying</button>
     </div>
     <div id="settingsScreen" class="start-screen" style="display: none;">
+        <button id="backButton" class="back-button-top">← Back</button>
         <h1>Settings</h1>
-        <div class="start-buttons">
-            <button id="langEN" class="start-button">English</button>
-            <button id="langSV" class="start-button">Svenska</button>
-            <button id="langAR" class="start-button">العربية</button>
+        <h2 style="color: white; margin-top: 30px;">Click Keys (Choose 1-3)</h2>
+        <div class="key-selector">
+            <div class="selected-keys" id="selectedKeys">Click to select keys...</div>
+            <div class="key-grid">
+                <button class="key-option" data-key="a">A</button>
+                <button class="key-option" data-key="b">B</button>
+                <button class="key-option" data-key="c">C</button>
+                <button class="key-option" data-key="d">D</button>
+                <button class="key-option" data-key="e">E</button>
+                <button class="key-option" data-key="f">F</button>
+                <button class="key-option" data-key="g">G</button>
+                <button class="key-option" data-key="h">H</button>
+                <button class="key-option" data-key="i">I</button>
+                <button class="key-option" data-key="j">J</button>
+                <button class="key-option" data-key="k">K</button>
+                <button class="key-option" data-key="l">L</button>
+                <button class="key-option" data-key="m">M</button>
+                <button class="key-option" data-key="n">N</button>
+                <button class="key-option" data-key="o">O</button>
+                <button class="key-option" data-key="p">P</button>
+                <button class="key-option" data-key="q">Q</button>
+                <button class="key-option" data-key="r">R</button>
+                <button class="key-option" data-key="s">S</button>
+                <button class="key-option" data-key="t">T</button>
+                <button class="key-option" data-key="u">U</button>
+                <button class="key-option" data-key="v">V</button>
+                <button class="key-option" data-key="w">W</button>
+                <button class="key-option" data-key="x">X</button>
+                <button class="key-option" data-key="y">Y</button>
+                <button class="key-option" data-key="z">Z</button>
+                <button class="key-option" data-key=" ">SPACE</button>
+            </div>
         </div>
-        <button id="backButton" class="start-button">Back</button>
     </div>
     <div class="game-container" style="display: none;">
         <div class="credits">
@@ -49,11 +80,24 @@
             🎡
             <div id="wheelTimer" class="wheel-timer">1:00:00</div>
         </button>
-        <h1>Charlie Klick</h1>
-        <div class="score-display">
-            <p>Score: <span id="score">0</span></p>
-            <p>Per Click: <span id="perClick">1</span></p>
-            <p>Kirk Power: <span id="perSecond">0</span></p>
+        <div class="top-stats">
+            <div class="stat-box main-score">
+                <div class="stat-label">KIRKS</div>
+                <div class="stat-value" id="score">0</div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-box small">
+                    <div class="stat-label">Per Click</div>
+                    <div class="stat-value" id="perClick">1</div>
+                </div>
+                <div class="stat-box small">
+                    <div class="stat-label">Auto/sec</div>
+                    <div class="stat-value" id="perSecond">0</div>
+                </div>
+            </div>
+        </div>
+        <div id="debtWarning" class="debt-warning" style="display: none;">
+            ⚠️ WARNING: You will be sent to Oil Dimension! Collect oil to escape! ⚠️
         </div>
         <div class="game-content">
             <div class="left-section">
@@ -65,6 +109,9 @@
                 </div>
                 <div id="goodJeffrey" class="good-jeffrey" style="display: none;">
                     <img src="image/JEFFREY" alt="Good Jeffrey">
+                </div>
+                <div id="freddy" class="freddy" style="display: none;">
+                    <img src="image/FREDDY.png" alt="Freddy">
                 </div>
             </div>
             <div class="upgrades">
@@ -110,6 +157,14 @@
         <img src="image/TRUMP" alt="Trump">
         <p class="quiz-label">Next Quiz:</p>
         <p id="timerDisplay">10:00</p>
+    </div>
+    <div id="wheelOverlay" class="wheel-overlay" style="display: none;">
+        <div class="wheel-container">
+            <h2>🎡 SPIN THE WHEEL 🎡</h2>
+            <canvas id="wheelCanvas" width="500" height="500"></canvas>
+            <button id="spinButton" class="start-button">SPIN!</button>
+            <button id="closeWheel" class="start-button">Close</button>
+        </div>
     </div>
     <div id="oilDimension" class="oil-dimension" style="display: none;">
         <h1>🛢️ OIL DIMENSION 🛢️</h1>

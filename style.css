@@ -77,6 +77,7 @@ button, .click-button, #clickButton {
     flex-direction: column;
     padding: 20px;
     position: relative;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .credits {
@@ -120,6 +121,73 @@ button, .click-button, #clickButton {
     transform: scale(0.95);
 }
 
+.key-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.selected-keys {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 15px 30px;
+    border-radius: 10px;
+    color: white;
+    font-size: 18px;
+    min-width: 300px;
+    text-align: center;
+}
+
+.key-grid {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    gap: 10px;
+    max-width: 600px;
+}
+
+.key-option {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid transparent;
+    padding: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.key-option:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+.key-option.selected {
+    background: #FFD700;
+    color: #000;
+    border-color: #FFA500;
+}
+
+.back-button-top {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.back-button-top:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
 .oil-lock {
     position: absolute;
     top: 0;
@@ -158,7 +226,7 @@ button, .click-button, #clickButton {
 
 .trump-button {
     background: rgba(0, 0, 0, 0.3);
-    padding: 8px 15px;
+    padding: 5px 10px;
     border-radius: 5px;
     border: none;
     cursor: pointer;
@@ -170,7 +238,7 @@ button, .click-button, #clickButton {
 }
 
 .trump-button img {
-    width: 40px;
+    width: 30px;
     height: auto;
     display: block;
 }
@@ -232,23 +300,50 @@ h1 {
     text-align: center;
 }
 
-.score-display {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 20px;
-    border-radius: 10px;
+.top-stats {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
     margin-bottom: 20px;
+}
+
+.stat-box {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 15px 30px;
+    border-radius: 10px;
     text-align: center;
+    backdrop-filter: blur(10px);
 }
 
-.score-display p {
-    font-size: 18px;
-    margin: 5px 0;
-    color: white;
+.stat-box.main-score {
+    width: 300px;
 }
 
-.score-display span {
+.stat-row {
+    display: flex;
+    gap: 10px;
+}
+
+.stat-box.small {
+    width: 145px;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 5px;
     font-weight: bold;
+}
+
+.stat-value {
+    font-size: 28px;
     color: white;
+    font-weight: bold;
+}
+
+.stat-box.small .stat-value {
+    font-size: 20px;
 }
 
 .game-content {
@@ -309,6 +404,28 @@ h1 {
     transform: scale(0.95);
 }
 
+.floating-plus {
+    position: absolute;
+    top: 50%;
+    color: #FFD700;
+    font-size: 48px;
+    font-weight: bold;
+    pointer-events: none;
+    animation: floatUp 1s ease-out;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes floatUp {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-100px);
+    }
+}
+
 .upgrades {
     flex: 1;
     background: white;
@@ -360,11 +477,13 @@ h1 {
     top: 50%;
     transform: translate(-50%, -50%);
     margin-left: 250px;
+    pointer-events: auto;
 }
 
 .jeffrey img {
     width: 100%;
     height: auto;
+    pointer-events: auto;
 }
 
 @keyframes bounce {
@@ -388,6 +507,51 @@ h1 {
 .good-jeffrey img {
     width: 100%;
     height: auto;
+}
+
+.freddy {
+    position: absolute;
+    width: 200px;
+    cursor: pointer;
+    z-index: 150;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    animation: shake 0.5s infinite;
+    pointer-events: auto;
+}
+
+.freddy img {
+    width: 100%;
+    height: auto;
+    pointer-events: auto;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+    25% { transform: translate(-50%, -50%) rotate(-5deg); }
+    75% { transform: translate(-50%, -50%) rotate(5deg); }
+}
+
+.debt-warning {
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 0, 0, 0.9);
+    color: white;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    z-index: 200;
+    animation: pulse 1s infinite;
+    text-align: center;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
 }
 
 .trump-quiz {
@@ -597,4 +761,35 @@ h1 {
     background: rgba(255, 255, 255, 0.2);
     color: white;
     cursor: pointer;
+}
+
+
+.wheel-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.wheel-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.wheel-container h2 {
+    color: #FFD700;
+    font-size: 32px;
+}
+
+#wheelCanvas {
+    border: 5px solid #FFD700;
+    border-radius: 50%;
 }

@@ -15,6 +15,10 @@ let trumpQuizActive = false;
 let oilFactory = false;
 let trumpQuizTimer = 600;
 let trumpTimerInterval = null;
+let wheelCooldown = 0;
+let wheelInterval = null;
+let inDebt = false;
+let debtTimer = null;
 
 const scoreEl = document.getElementById('score');
 const perClickEl = document.getElementById('perClick');
@@ -28,6 +32,7 @@ const upgrade4 = document.getElementById('upgrade4');
 const oilButton = document.getElementById('oilButton');
 const bgMusic = document.getElementById('bgMusic');
 const gangSound = document.getElementById('gangSound');
+const virusSound = document.getElementById('virusSound');
 const startScreen = document.getElementById('startScreen');
 const startButton = document.getElementById('startButton');
 const continueButton = document.getElementById('continueButton');
@@ -35,6 +40,8 @@ const newGameButton = document.getElementById('newGameButton');
 const gameContainer = document.querySelector('.game-container');
 const jeffrey = document.getElementById('jeffrey');
 const goodJeffrey = document.getElementById('goodJeffrey');
+const freddy = document.getElementById('freddy');
+const debtWarning = document.getElementById('debtWarning');
 const trumpQuiz = document.getElementById('trumpQuiz');
 const quizQuestion = document.getElementById('quizQuestion');
 const quizOptions = document.getElementById('quizOptions');
@@ -53,6 +60,13 @@ const backButton = document.getElementById('backButton');
 const langEN = document.getElementById('langEN');
 const langSV = document.getElementById('langSV');
 const langAR = document.getElementById('langAR');
+const wheelButton = document.getElementById('wheelButton');
+const wheelTimer = document.getElementById('wheelTimer');
+const saveQuitButton = document.getElementById('saveQuitButton');
+const wheelOverlay = document.getElementById('wheelOverlay');
+const wheelCanvas = document.getElementById('wheelCanvas');
+const spinButton = document.getElementById('spinButton');
+const closeWheel = document.getElementById('closeWheel');
 
 let currentLanguage = localStorage.getItem('language') || 'en';
 
@@ -356,6 +370,12 @@ newGameButton.addEventListener('click', () => {
     startGame();
 });
 
+saveQuitButton.addEventListener('click', () => {
+    saveGame();
+    gameContainer.style.display = 'none';
+    startScreen.style.display = 'block';
+});
+
 settingsButton.addEventListener('click', () => {
     startScreen.style.display = 'none';
     settingsScreen.style.display = 'block';
@@ -366,22 +386,65 @@ backButton.addEventListener('click', () => {
     startScreen.style.display = 'block';
 });
 
-langEN.addEventListener('click', () => {
-    currentLanguage = 'en';
-    localStorage.setItem('language', currentLanguage);
-    updateLanguage();
+// Key selector
+let selectedKeys = JSON.parse(localStorage.getItem('clickKeys')) || [];
+const selectedKeysDisplay = document.getElementById('selectedKeys');
+const keyOptions = document.querySelectorAll('.key-option');
+
+function updateKeyDisplay() {
+    if (selectedKeys.length === 0) {
+        selectedKeysDisplay.textContent = 'Press keys to set...';
+    } else {
+        selectedKeysDisplay.textContent = selectedKeys.map(k => k === ' ' ? 'SPACE' : k.toUpperCase()).join(', ');
+    }
+    
+    keyOptions.forEach(btn => {
+        if (selectedKeys.includes(btn.dataset.key)) {
+            btn.classList.add('selected');
+        } else {
+            btn.classList.remove('selected');
+        }
+    });
+}
+
+keyOptions.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const key = btn.dataset.key;
+        
+        if (selectedKeys.includes(key)) {
+            selectedKeys = selectedKeys.filter(k => k !== key);
+        } else if (selectedKeys.length < 3) {
+            selectedKeys.push(key);
+        }
+        
+        localStorage.setItem('clickKeys', JSON.stringify(selectedKeys));
+        updateKeyDisplay();
+    });
 });
 
-langSV.addEventListener('click', () => {
-    currentLanguage = 'sv';
-    localStorage.setItem('language', currentLanguage);
-    updateLanguage();
+updateKeyDisplay();
+
+// Key press handler - prevent holding
+const pressedKeys = new Set();
+
+document.addEventListener('keydown', (e) => {
+    // Prevent Enter from triggering buttons
+    if (e.key === 'Enter' && gameContainer.style.display !== 'none') {
+        e.preventDefault();
+        return;
+    }
+    
+    if (gameContainer.style.display !== 'none' && selectedKeys.includes(e.key.toLowerCase())) {
+        if (!pressedKeys.has(e.key.toLowerCase())) {
+            e.preventDefault();
+            pressedKeys.add(e.key.toLowerCase());
+            clickButton.click();
+        }
+    }
 });
 
-langAR.addEventListener('click', () => {
-    currentLanguage = 'ar';
-    localStorage.setItem('language', currentLanguage);
-    updateLanguage();
+document.addEventListener('keyup', (e) => {
+    pressedKeys.delete(e.key.toLowerCase());
 });
 
 updateLanguage();
@@ -416,6 +479,11 @@ goodJeffrey.addEventListener('click', () => {
     render();
 });
 
+freddy.addEventListener('click', () => {
+    score += 10;
+    render();
+});
+
 function spawnGoodJeffrey() {
     if (!goodJeffreyActive) {
         goodJeffrey.style.display = 'block';
@@ -424,9 +492,10 @@ function spawnGoodJeffrey() {
 }
 
 function spawnJeffrey() {
-    if (score < 1000 && !jeffreyActive && Math.random() < 0.1) {
+    if (score < 1000 && !jeffreyActive && Math.random() < 0.3) {
         jeffrey.style.display = 'block';
         jeffreyActive = true;
+        jeffreyClickCount = 0;
         setTimeout(() => {
             if (jeffreyActive) {
                 jeffreyStealInterval = setInterval(() => {
@@ -451,6 +520,14 @@ clickButton.addEventListener('click', () => {
     setTimeout(() => {
         clickImage.src = 'image/SITTING';
     }, 500);
+    
+    // Create floating +1
+    const plus = document.createElement('div');
+    plus.className = 'floating-plus';
+    plus.textContent = '+' + clickPower;
+    plus.style.left = (Math.random() * 100 - 50) + 'px';
+    clickButton.appendChild(plus);
+    setTimeout(() => plus.remove(), 1000);
     
     render();
 });
@@ -567,6 +644,37 @@ function render() {
     perClickEl.textContent = clickPower;
     perSecondEl.textContent = autoClickerActive ? '3 per 10s' : '0';
     
+    // Handle debt state
+    if (score < 0 && !inDebt) {
+        inDebt = true;
+        clickImage.src = 'image/BOO.png';
+        bgMusic.pause();
+        virusSound.play();
+        freddy.style.display = 'block';
+        debtWarning.style.display = 'block';
+        
+        // Start 30 second timer
+        debtTimer = setTimeout(() => {
+            gameContainer.style.display = 'none';
+            oilDimension.style.display = 'flex';
+            virusSound.pause();
+            bgMusic.play();
+            freddy.style.display = 'none';
+            debtWarning.style.display = 'none';
+        }, 30000);
+    } else if (score >= 0 && inDebt) {
+        inDebt = false;
+        clickImage.src = 'image/SITTING';
+        virusSound.pause();
+        bgMusic.play();
+        freddy.style.display = 'none';
+        debtWarning.style.display = 'none';
+        if (debtTimer) {
+            clearTimeout(debtTimer);
+            debtTimer = null;
+        }
+    }
+    
     upgrade1.disabled = score < 40 || upgrade1Count >= 3;
     upgrade2.disabled = score < 450 || upgrade2Count >= 3;
     upgrade3.disabled = score < 10000 || autoClickerActive;
@@ -648,3 +756,151 @@ document.addEventListener('keypress', (e) => {
         adminInput = adminInput.slice(-10);
     }
 });
+
+// Wheel timer
+wheelCooldown = parseInt(localStorage.getItem('wheelCooldown')) || 0;
+
+const prizes = [
+    { text: 'LOSE ALL', color: '#000' },
+    { text: '+100', color: '#4CAF50' },
+    { text: 'JACKPOT', color: '#FFD700' },
+    { text: '+50', color: '#2196F3' },
+    { text: 'NOTHING', color: '#9C27B0' },
+    { text: '+500', color: '#FF6B6B' },
+    { text: 'x2 SCORE', color: '#FF8C00' },
+    { text: '+1000', color: '#00BCD4' }
+];
+
+let currentRotation = 0;
+let isSpinning = false;
+
+function drawWheel() {
+    const ctx = wheelCanvas.getContext('2d');
+    const centerX = 250;
+    const centerY = 250;
+    const radius = 200;
+    const sliceAngle = (2 * Math.PI) / prizes.length;
+    
+    ctx.clearRect(0, 0, 500, 500);
+    
+    prizes.forEach((prize, i) => {
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, i * sliceAngle, (i + 1) * sliceAngle);
+        ctx.lineTo(centerX, centerY);
+        ctx.fillStyle = prize.color;
+        ctx.fill();
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        ctx.rotate(i * sliceAngle + sliceAngle / 2);
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 16px Arial';
+        ctx.fillText(prize.text, radius / 1.5, 10);
+        ctx.restore();
+    });
+    
+    // Draw pointer
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY - radius - 20);
+    ctx.lineTo(centerX - 15, centerY - radius);
+    ctx.lineTo(centerX + 15, centerY - radius);
+    ctx.fillStyle = '#FFD700';
+    ctx.fill();
+}
+
+function updateWheelTimer() {
+    if (wheelCooldown > 0) {
+        wheelCooldown--;
+        localStorage.setItem('wheelCooldown', wheelCooldown);
+        const hours = Math.floor(wheelCooldown / 3600);
+        const mins = Math.floor((wheelCooldown % 3600) / 60);
+        const secs = wheelCooldown % 60;
+        wheelTimer.textContent = `${hours}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        wheelButton.style.opacity = '0.5';
+        wheelButton.style.cursor = 'not-allowed';
+    } else {
+        wheelTimer.textContent = 'READY!';
+        wheelButton.style.opacity = '1';
+        wheelButton.style.cursor = 'pointer';
+    }
+}
+
+wheelButton.addEventListener('click', () => {
+    if (wheelCooldown === 0) {
+        wheelOverlay.style.display = 'flex';
+        drawWheel();
+    }
+});
+
+closeWheel.addEventListener('click', () => {
+    wheelOverlay.style.display = 'none';
+});
+
+spinButton.addEventListener('click', () => {
+    if (isSpinning) return;
+    
+    isSpinning = true;
+    const spins = 5 + Math.random() * 5;
+    const randomPrize = Math.floor(Math.random() * prizes.length);
+    const targetRotation = currentRotation + (360 * spins) + (randomPrize * (360 / prizes.length));
+    
+    const duration = 3000;
+    const startTime = Date.now();
+    
+    function animate() {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        
+        currentRotation = targetRotation * easeOut;
+        
+        const ctx = wheelCanvas.getContext('2d');
+        ctx.save();
+        ctx.translate(250, 250);
+        ctx.rotate((currentRotation * Math.PI) / 180);
+        ctx.translate(-250, -250);
+        drawWheel();
+        ctx.restore();
+        
+        if (progress < 1) {
+            requestAnimationFrame(animate);
+        } else {
+            isSpinning = false;
+            const prize = prizes[randomPrize];
+            
+            // Apply prize
+            if (prize.text === 'LOSE ALL') {
+                score = 0;
+            } else if (prize.text === '+100') {
+                score += 100;
+            } else if (prize.text === '+50') {
+                score += 50;
+            } else if (prize.text === '+500') {
+                score += 500;
+            } else if (prize.text === '+1000') {
+                score += 1000;
+            } else if (prize.text === 'JACKPOT') {
+                score += 5000;
+            } else if (prize.text === 'x2 SCORE') {
+                score *= 2;
+            }
+            
+            render();
+            alert(`You won: ${prize.text}!`);
+            
+            wheelCooldown = 3600;
+            localStorage.setItem('wheelCooldown', wheelCooldown);
+            updateWheelTimer();
+            wheelOverlay.style.display = 'none';
+        }
+    }
+    
+    animate();
+});
+
+wheelInterval = setInterval(updateWheelTimer, 1000);
+updateWheelTimer();
